@@ -1,0 +1,8 @@
+# Фрагмент таблицы filter для изолированного стенда (синтаксис iptables-save).
+*filter
+-A FORWARD -s 10.10.10.10/32 -p tcp --dport 23 -j REJECT
+-A FORWARD -p tcp --tcp-flags ACK ACK -m conntrack ! --ctstate ESTABLISHED -j REJECT
+-A FORWARD -p tcp --dport 22 -m connlimit --connlimit-above 3 --connlimit-mask 32 -j DROP
+-A FORWARD -p icmp --icmp-type echo-request -m limit --limit 1/second --limit-burst 1 -j ACCEPT
+-A FORWARD -p icmp --icmp-type echo-request -j DROP
+COMMIT
